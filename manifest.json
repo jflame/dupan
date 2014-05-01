@@ -1,0 +1,23 @@
+{   
+  "name": "personal trans",
+  "version": "0.1",
+  "description": "personal trans",
+  "permissions" : [
+    "notifications",
+    "*://*.baidu.com/*",
+    "*://*.baidupcs.com/*"
+   ],
+  "icons": {
+    "128": "images/128.png",
+    "48": "images/48.png"
+  },
+  "content_scripts": [{
+    "matches": ["http://pan.baidu.com/*"],
+    "js": ["js/spark.js", "js/content.js"],
+    "run_at":"document_end"
+  }],
+  "web_accessible_resources": [
+    "images/128.png", "js/inject.js"
+  ],
+  "manifest_version": 2
+}
