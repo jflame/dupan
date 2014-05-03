@@ -15,6 +15,9 @@
     if(items[0].isdir) {
       return alert("不能分享文件夹");
     }
+    if(items[0].size < 256*1024) {
+      return alert("文件必须大于256kb");
+    }
     if(items[0].md5 && items[0].dlink && items[0].size && items[0].server_filename) {
       window.postMessage({file: items[0]}, "*");
     }

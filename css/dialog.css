@@ -1,0 +1,44 @@
+.centerbox {
+  /* basic*/
+  position: absolute; 
+  top: 0px; 
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: -100px;
+
+  /*shit flexbox*/
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  
+  display: box;
+  box-orient: horizontal;
+  box-pack: center;
+  box-align: center;
+
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-flex-pack: center;
+  -webkit-flex-align: center;
+
+  display: flex;
+  flex-direction: row;
+  flex-pack: center;
+  justify-content: center;
+  flex-align: center;
+  align-items: center;
+}
+.appMsg {
+  width: 350px;
+  height: 120px;
+  text-align: center;
+  background-color: #CCC;
+}
+.appCont {
+  text-align: end;
+}
+.appCont a {
+  text-decoration: initial;
+}

@@ -1,7 +1,7 @@
 {   
-  "name": "personal trans",
+  "name": "\u767e\u5ea6\u7f51\u76d8\u533f\u540d\u5206\u4eab",
   "version": "0.1",
-  "description": "personal trans",
+  "description": "\u7b80\u5355\u5206\u4eab\u4e2a\u4eba\u7f51\u76d8\u4e2d\u7684\u6587\u4ef6",
   "permissions" : [
     "notifications",
     "*://*.baidu.com/*",
@@ -14,6 +14,7 @@
   "content_scripts": [{
     "matches": ["http://pan.baidu.com/*"],
     "js": ["js/spark.js", "js/content.js"],
+    "css": ["css/dialog.css"],
     "run_at":"document_end"
   }],
   "web_accessible_resources": [
