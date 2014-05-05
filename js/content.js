@@ -3,21 +3,38 @@
   var script = document.createElement("script");
   script.src = chrome.extension.getURL('/js/inject.js');
   document.body.appendChild(script);
-}());
 
-var div = document.createElement("div");
-div.className = "centerbox";
-document.body.appendChild(div);
-div.addEventListener("click", function(e) {
-  if(e.target.className == "close") {
-    e.target.parentNode.parentNode.remove();
-  }
-}, true); 
+  var div = document.createElement("div");
+  div.className = "centerbox";
+  div.innerHTML = ' \
+    <div id="appMsg"> \
+      <div id="appHead"> \
+        <a href="javascript:void(0)" title="关闭" class="close">×</a> \
+      </div> \
+      <div id="appPro"></div> \
+      <div id="appBody"></div> \
+    </div>';
+  document.body.appendChild(div);
+  div.addEventListener("click", function(e) {
+    if(e.target.className == "close") {
+      document.getElementById('appMsg').className = "";
+    }
+  }, true); 
+}());
+/*the progress*/
+var options = {
+  bg: 'rgb(39, 93, 207)',
+  target: document.getElementById('appPro'),
+  id: 'mynano'
+};
+var nanobar = new Nanobar(options);
+
 /*******/
 window.addEventListener("message", function(event) {
   if (event.source != window) return;
   if (!event.data.file) return;
   var file = event.data.file;
+  dialog(1);
   md5(file);
 }, false); 
 /*check the file's md5*/
@@ -27,12 +44,16 @@ function md5(file) {
   xhr.onload = function(e) { 
     var md5 = this.getResponseHeader("Content-MD5");
     if(!md5) {
-      return alert("文件信息错误，请重新上传该文件");
+      //return alert("文件信息错误，请重新上传该文件");
+      return dialog(2);
     }
-    dialog1();
     file.md5 = md5;
     smd5(file);
-  }
+  };
+  xhr.ontimeout = xhr.onerror = function(e) {
+    return dialog();
+  };
+  xhr.timeout = 10000;
   xhr.send();
 }
 /*compute the smd5*/
@@ -41,6 +62,11 @@ function smd5(file) {
   xhr.open('GET', file.dlink, true);
   xhr.setRequestHeader("Range", "bytes=0-262143");
   xhr.responseType = 'blob';
+  xhr.onprogress = function(e) {
+    if (e.lengthComputable) {
+      nanobar.go((e.loaded / e.total) * 100);
+    }
+  };
   xhr.onload = function(e) {
     var fileReader = new FileReader();
     fileReader.onload = function(e) {
@@ -51,6 +77,10 @@ function smd5(file) {
     };  
     fileReader.readAsBinaryString(this.response);
   };
+  xhr.ontimeout = xhr.onerror = function(e) {
+    return dialog();
+  };
+  xhr.timeout = 10000;
   xhr.send();
 }   
 /*upload the hash to cloud*/
@@ -68,27 +98,38 @@ function upload(file) {
   xhr.onload = function(e) {
     var json = JSON.parse(this.responseText);
     //alert("分享地址: " + "\n" + "http://dutrans.duapp.com/share/" + json.objectId);
-    dialog2(json.objectId);
+    dialog(3, json.objectId);
   };
+  xhr.ontimeout = xhr.onerror = function(e) {
+    return dialog();
+  };
+  xhr.timeout = 10000;
   xhr.send(JSON.stringify(data));
 }   
 
-function dialog1() {
-  div.innerHTML = ' \
-  <div class="appMsg" style="z-index: 10000;"> \
-    <div class="appCont"> \
-      <a href="javascript:void(0)" title="关闭" class="close">×</a> \
-    </div> \
-    <p>正在获取文件信息...</p> \
-  </div>';
+function dialog(state, extra) {
+  var extra = extra || null;
+  function close() {
+    setTimeout(function(){document.getElementById('appMsg').className = "";}, 5000);
+  }
+  switch(state) {
+    case 1:
+      document.getElementById('appMsg').className = "show";
+      document.getElementById('appBody').innerText = '正在获取文件信息...';
+      break;
+    case 2:
+      document.getElementById('appMsg').className = "show";
+      document.getElementById('appBody').innerText = '文件信息错误，请重新上传该文件';
+      close();
+      break;
+    case 3:
+      document.getElementById('appMsg').className = "show";
+      document.getElementById('appBody').innerText = '分享地址: \n http://dutrans.duapp.com/share/'+ extra;
+      break;
+    default:
+      document.getElementById('appMsg').className = "show";
+      document.getElementById('appBody').innerText = '网络错误，请稍后再试';
+      close();
+  }
 }
 
-function dialog2(path) {
-  div.innerHTML = ' \
-  <div class="appMsg" style="z-index: 10000;"> \
-    <div class="appCont"> \
-      <a href="javascript:void(0)" title="关闭" class="close">×</a> \
-    </div> \
-    <p>分享地址: http://dutrans.duapp.com/share/'+ path +'</p> \
-  </div>';
-}

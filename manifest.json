@@ -1,6 +1,6 @@
 {   
   "name": "\u767e\u5ea6\u7f51\u76d8\u533f\u540d\u5206\u4eab",
-  "version": "0.1",
+  "version": "0.2",
   "description": "\u7b80\u5355\u5206\u4eab\u4e2a\u4eba\u7f51\u76d8\u4e2d\u7684\u6587\u4ef6",
   "permissions" : [
     "notifications",
@@ -13,7 +13,7 @@
   },
   "content_scripts": [{
     "matches": ["http://pan.baidu.com/*"],
-    "js": ["js/spark.js", "js/content.js"],
+    "js": ["lib/nanobar.min.js", "lib/spark.js", "js/content.js"],
     "css": ["css/dialog.css"],
     "run_at":"document_end"
   }],
