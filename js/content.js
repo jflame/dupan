@@ -34,6 +34,7 @@ window.addEventListener("message", function(event) {
   if (event.source != window) return;
   if (!event.data.file) return;
   var file = event.data.file;
+  file.dlink = "http://pcs.baidu.com/rest/2.0/pcs/file?app_id=250528&method=download&path=" + encodeURIComponent(file.path);
   dialog(1);
   md5(file);
 }, false); 
