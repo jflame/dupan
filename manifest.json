@@ -12,7 +12,7 @@
     "48": "images/48.png"
   },
   "content_scripts": [{
-    "matches": ["http://pan.baidu.com/*"],
+    "matches": ["http://pan.baidu.com/disk/*"],
     "js": ["lib/nanobar.min.js", "lib/spark.js", "js/content.js"],
     "css": ["css/dialog.css"],
     "run_at":"document_end"
