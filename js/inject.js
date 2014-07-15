@@ -1,14 +1,15 @@
 (function() {
   var a = document.createElement("a");
-  a.className="bbtn";
-  a.style.outline="none";
-  a.href="javascript:;";
-  a.id="personalTrans";
-  a.innerHTML = '<em class="icon-share"></em><b>私密分享</b>'
-  document.querySelector('#file_action_buttons').appendChild(a);
+  a.className = "btn share-btn";
+  a.style.display = "inline-block";
+  a.id = "personalTrans";
+  a.innerHTML = '<span class="ico"></span><span class="btn-val">私密分享</span>'
+  document.querySelector('.module-list-toolbar').querySelector('.bar').appendChild(a);
 
   a.addEventListener("click", function() {
-    var items = FileUtils.getListViewCheckedItems();
+    var data = require("common:widget/data-center/data-center.js"),
+        items = get("tmpl-selected-list")();
+
     if(items.length != 1) {
       return alert("一次只能分享一个文件");
     }

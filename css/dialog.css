@@ -5,7 +5,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  z-index: -100px;
+  z-index: -100;
 
   /*shit flexbox*/
   display: -webkit-box;
