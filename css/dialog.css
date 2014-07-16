@@ -5,7 +5,6 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  z-index: -100;
 
   /*shit flexbox*/
   display: -webkit-box;
@@ -36,7 +35,7 @@
   border: 1px solid;  
   border-radius: 5px;
   text-align: center;
-  z-index: 10000;
+  z-index: 9999;
   display: none;
 }
 #appMsg.show {
@@ -47,6 +46,7 @@
   background-color: #CCC;
 }
 #appHead a {
+  cursor: pointer;
   margin-right: 10px;
   text-decoration: initial;
   font-size: 21px;  

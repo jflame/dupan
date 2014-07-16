@@ -8,7 +8,7 @@
 
   a.addEventListener("click", function() {
     var data = require("common:widget/data-center/data-center.js"),
-        items = get("tmpl-selected-list")();
+        items = data.get("tmpl-selected-list")();
 
     if(items.length != 1) {
       return alert("一次只能分享一个文件");

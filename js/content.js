@@ -9,22 +9,22 @@
   div.innerHTML = ' \
     <div id="appMsg"> \
       <div id="appHead"> \
-        <a href="javascript:void(0)" title="关闭" class="close">×</a> \
+        <a title="关闭" id="appClose">×</a> \
       </div> \
       <div id="appPro"></div> \
       <div id="appBody"></div> \
     </div>';
-  document.body.appendChild(div);
-  div.addEventListener("click", function(e) {
-    if(e.target.className == "close") {
-      document.getElementById('appMsg').className = "";
-    }
+  var parent = document.body;
+  parent.insertBefore(div, parent.childNodes[0]);
+
+  div.querySelector('#appClose').addEventListener("click", function(e) {
+      div.querySelector("#appMsg").classList.remove('show');
   }, true); 
 }());
 /*the progress*/
 var options = {
   bg: 'rgb(39, 93, 207)',
-  target: document.getElementById('appPro'),
+  target: document.querySelector('#appPro'),
   id: 'mynano'
 };
 var nanobar = new Nanobar(options);
@@ -89,11 +89,12 @@ function smd5(file) {
 }   
 /*upload the hash to cloud*/
 function upload(file) { 
-  var data = {};
-  data.smd5 = file.smd5;
-  data.md5 = file.md5;
-  data.size = file.size;
-  data.server_filename = file.server_filename;
+  var data = {
+    smd5: file.smd5,
+    md5: file.md5,
+    size: file.size,
+    server_filename: file.server_filename
+  };
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://cn.avoscloud.com/1/classes/TransFile", true);
   xhr.setRequestHeader("X-AVOSCloud-Application-Id", "6b6vd1z0egkkta3dh3yfjcogiuzvtung8pog91ox0etun4tx");
@@ -112,27 +113,32 @@ function upload(file) {
 }   
 
 function dialog(state, extra) {
-  var extra = extra || null;
-  function close() {
-    setTimeout(function(){document.getElementById('appMsg').className = "";}, 5000);
-  }
+  var extra = extra || "",
+      msg  = document.querySelector('#appMsg'),
+      body = document.querySelector('#appBody'),
+      showText = function (e) {
+        body.innerText = e;
+      },
+      close = function () {
+        setTimeout(function() {
+          msg.classList.remove('show');
+        }, 5000);
+      };
+
+  msg.classList.add('show');
   switch(state) {
     case 1:
-      document.getElementById('appMsg').className = "show";
-      document.getElementById('appBody').innerText = '正在获取文件信息...';
+      showText('正在获取文件信息...');
       break;
     case 2:
-      document.getElementById('appMsg').className = "show";
-      document.getElementById('appBody').innerText = '文件信息错误，请重新上传该文件';
+      showText('文件信息错误，请重新上传该文件');
       close();
       break;
     case 3:
-      document.getElementById('appMsg').className = "show";
-      document.getElementById('appBody').innerText = '分享地址: \n http://dutrans.duapp.com/share/'+ extra;
+      showText('分享地址: \n http://dutrans.duapp.com/share/'+ extra);
       break;
     default:
-      document.getElementById('appMsg').className = "show";
-      document.getElementById('appBody').innerText = '网络错误，请稍后再试';
+      showText('网络错误，请稍后再试');
       close();
   }
 }
